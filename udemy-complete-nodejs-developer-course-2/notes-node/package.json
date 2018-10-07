@@ -1,0 +1,12 @@
+{
+  "name": "notes-node",
+  "version": "1.0.0",
+  "main": "app.js",
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "yargs": "^12.0.2"
+  },
+  "devDependencies": {},
+  "author": "Graham Langford",
+  "license": "MIT"
+}
