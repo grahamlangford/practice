@@ -1,29 +1,46 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 
+import Root from '../../Root'
 import CommentBox from '../CommentBox'
 
 let wrap
 
 beforeEach(() => {
-  wrap = () => shallow(<CommentBox />)
+  wrap = () =>
+    mount(
+      <Root>
+        <CommentBox />
+      </Root>
+    )
 })
 
-it('has a text area and a button', () => {
+it('has a text area and two buttons', () => {
   const wrapper = wrap()
 
   expect(wrapper.find('textarea').length).toEqual(1)
-  expect(wrapper.find('button').length).toEqual(1)
+  expect(wrapper.find('button').length).toEqual(2)
 })
 
-it('has a text area that users can type in', () => {
-  const wrapper = wrap()
+describe('the text area', () => {
+  let wrapper
+  beforeEach(() => {
+    wrapper = wrap()
 
-  wrapper
-    .find('textarea')
-    .simulate('change', { target: { value: 'new comment' } })
+    wrapper
+      .find('textarea')
+      .simulate('change', { target: { value: 'new comment' } })
+    wrapper.update()
+  })
 
-  wrapper.update()
+  it('allows users to edit it', () => {
+    expect(wrapper.find('textarea').prop('value')).toEqual('new comment')
+  })
 
-  expect(wrapper.find('textarea').prop('value')).toEqual('new comment')
+  it('when form is submitted, text area is emptied', () => {
+    wrapper.find('form').simulate('submit', { preventDefault: () => {} })
+
+    wrapper.update()
+    expect(wrapper.find('textarea').prop('value')).toEqual('')
+  })
 })
